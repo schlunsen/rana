@@ -5,6 +5,9 @@ use bech32::{ToBase32, Variant};
 use bitcoin_hashes::hex::ToHex;
 use nostr_sdk::prelude::{FromMnemonic, GenerateMnemonic, Keys, ToBech32};
 
+    use colored::*;
+
+
 pub fn handle_mnemonic(parsed_args: &CLIArgs) {
     if parsed_args.word_count > 0 {
         let mut word_count = parsed_args.word_count;
@@ -20,13 +23,16 @@ pub fn handle_mnemonic(parsed_args: &CLIArgs) {
             .expect("Error encoding to bech32");
 
         println!(
-            "Mnemonic: {}\nPublic key: {}\nPrivate key: {}",
-            mnemonic,
-            nostr_pubkey,
+            "{} {}\n{} {}\n{} {}",
+            "Mnemonic:".bold(),
+            mnemonic.to_string().bold().bright_magenta(),
+            "Public key:".bold(),
+            nostr_pubkey.to_string().bright_green(),
+            "Private key:".bold(),
             keys.secret_key()
                 .expect("Could not get secret key")
                 .to_bech32()
-                .expect("Could not get secret key bech32 conversion")
+                .expect("Could not get secret key bech32 conversion").bright_red()
         );
         exit(0)
     }
@@ -45,11 +51,11 @@ pub fn handle_mnemonic(parsed_args: &CLIArgs) {
 
         println!(
             "Public key: {}\nPrivate key: {}",
-            nostr_pubkey,
+            nostr_pubkey.white(),
             keys.secret_key()
                 .expect("Could not get secret key")
                 .to_bech32()
-                .expect("Could not get secret key bech32 conversion")
+                .expect("Could not get secret key bech32 conversion").white()
         );
         exit(0);
     }
